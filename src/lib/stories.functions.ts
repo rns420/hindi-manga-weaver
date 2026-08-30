@@ -90,10 +90,15 @@ export const updateStoryMeta = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     const { getPublicDb } = await import("./supabase-public.server");
     const db = getPublicDb();
-    const patch: Record<string, string> = { updated_at: new Date().toISOString() };
-    if (data.title) patch["title"] = data.title;
-    if (data.author) patch["author_name"] = data.author;
-    if (data.summary) patch["summary"] = data.summary;
+    const patch: {
+      updated_at: string;
+      title?: string;
+      author_name?: string;
+      summary?: string;
+    } = { updated_at: new Date().toISOString() };
+    if (data.title) patch.title = data.title;
+    if (data.author) patch.author_name = data.author;
+    if (data.summary) patch.summary = data.summary;
     const { error } = await db.from("stories").update(patch).eq("id", data.storyId);
     if (error) throw new Error(error.message);
     return { ok: true };
