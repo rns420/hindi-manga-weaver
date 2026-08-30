@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as LibraryRouteImport } from './routes/library'
 import { Route as ApiPublicLibraryRouteImport } from './routes/api/public/library'
 import { Route as ApiPublicPartPartIdRouteImport } from './routes/api/public/part.$partId'
 import { Route as ApiPublicStoryStoryIdRouteImport } from './routes/api/public/story.$storyId'
@@ -17,6 +18,11 @@ import { Route as ApiPublicStoryStoryIdRouteImport } from './routes/api/public/s
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LibraryRoute = LibraryRouteImport.update({
+  id: '/library',
+  path: '/library',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicLibraryRoute = ApiPublicLibraryRouteImport.update({
@@ -37,12 +43,14 @@ const ApiPublicStoryStoryIdRoute = ApiPublicStoryStoryIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/library': typeof LibraryRoute
   '/api/public/library': typeof ApiPublicLibraryRoute
   '/api/public/part/$partId': typeof ApiPublicPartPartIdRoute
   '/api/public/story/$storyId': typeof ApiPublicStoryStoryIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/library': typeof LibraryRoute
   '/api/public/library': typeof ApiPublicLibraryRoute
   '/api/public/part/$partId': typeof ApiPublicPartPartIdRoute
   '/api/public/story/$storyId': typeof ApiPublicStoryStoryIdRoute
@@ -50,6 +58,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/library': typeof LibraryRoute
   '/api/public/library': typeof ApiPublicLibraryRoute
   '/api/public/part/$partId': typeof ApiPublicPartPartIdRoute
   '/api/public/story/$storyId': typeof ApiPublicStoryStoryIdRoute
@@ -58,18 +67,21 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/library'
     | '/api/public/library'
     | '/api/public/part/$partId'
     | '/api/public/story/$storyId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/library'
     | '/api/public/library'
     | '/api/public/part/$partId'
     | '/api/public/story/$storyId'
   id:
     | '__root__'
     | '/'
+    | '/library'
     | '/api/public/library'
     | '/api/public/part/$partId'
     | '/api/public/story/$storyId'
@@ -77,6 +89,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  LibraryRoute: typeof LibraryRoute
   ApiPublicLibraryRoute: typeof ApiPublicLibraryRoute
   ApiPublicPartPartIdRoute: typeof ApiPublicPartPartIdRoute
   ApiPublicStoryStoryIdRoute: typeof ApiPublicStoryStoryIdRoute
@@ -89,6 +102,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/library': {
+      id: '/library'
+      path: '/library'
+      fullPath: '/library'
+      preLoaderRoute: typeof LibraryRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/library': {
@@ -117,6 +137,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  LibraryRoute: LibraryRoute,
   ApiPublicLibraryRoute: ApiPublicLibraryRoute,
   ApiPublicPartPartIdRoute: ApiPublicPartPartIdRoute,
   ApiPublicStoryStoryIdRoute: ApiPublicStoryStoryIdRoute,
