@@ -133,7 +133,7 @@ export async function planAndSeedPart(partId: string) {
   await db
     .from("story_parts")
     .update({
-      plan: plan as unknown as Record<string, unknown>,
+      plan: JSON.parse(JSON.stringify(plan)),
       title: plan.title,
       status: "writing",
       updated_at: new Date().toISOString(),
